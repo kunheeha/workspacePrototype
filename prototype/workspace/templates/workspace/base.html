@@ -26,16 +26,11 @@
 	      </button>
 	      <div class="collapse navbar-collapse" id="navbarToggle">
 	        <div class="navbar-nav mr-auto">
-	          <a class="nav-item nav-link" href="#">Home</a>
-	          <a class="nav-item nav-link" href="#">About</a>
+	          <a class="nav-item nav-link" href="{% url 'user-dashboard' %}">My Dashboard</a>
 	        </div>
 	        <!-- Navbar Right Side -->
 	        <div class="navbar-nav">
-	        		<a class="nav-item nav-link" href="#">My Profile</a>
-	        		<a class="nav-item nav-link" href="#">New Post</a>
-	        		<a class="nav-item nav-link" href="#">Logout</a>
-		          <a class="nav-item nav-link" href="#">Login</a>
-		          <a class="nav-item nav-link" href="#">Register</a>
+	        		<a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
 	        </div>
 	      </div>
 	    </div>
@@ -43,7 +38,7 @@
 	</header>
 	<main role="main" class="container">
 	  <div class="row">
-	    <div class="col-md-8">
+	    <div class="col-md-12">
 	    	{% if messages %}
 	    		{% for message in messages %}
 	    			<div class="alert alert-{{ message.tags }}">{{ message }}</div>
