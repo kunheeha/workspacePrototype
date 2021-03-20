@@ -1,6 +1,8 @@
 {% extends 'workspace/base.html' %}
-
+{% load static %}
 {% block head %}
+
+	<link rel="stylesheet" type="text/css" href="{% static 'workspace/workspace.css' %}">
 
 {% endblock %}
 
@@ -9,16 +11,49 @@
 	<h1>{{ workspace.title }}</h1>
 
 	<div class="row">
-		{% for todoitem in todoitems %}
-		  <div class="col-sm-6 mb-2">
-		    <div class="card">
-		      <div class="card-body">
-		        <h5 class="card-title">{{ todoitem.name }}</h5>
-		        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-		        <a href="#" class="btn btn-primary">Go somewhere</a>
-		      </div>
-		    </div>
-		  </div>
-	  {% endfor %}
+		{# TodoList #}
+		<div class="col">
+			<h3>Tasks</h3>
+			<div>
+				<ul class="list-group">
+					{% for todoitem in todoitems %}
+						{% if todoitem.complete %}
+							<div class="list-group-item list-group-item-action todoitem">
+								<p><del>{{ todoitem.name }}</del></p>
+								<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{todoitem.id}}"></button>
+								<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ todoitem.id }}">
+									<a href="#" class="dropdown-item">Edit</a>
+									<a href="#" class="dropdown-item">Set due date</a>
+									<div class="dropdown-divider"></div>
+									<a href="#" class="dropdown-item">Delete</a>
+								</div>
+							</div>
+						{% else %}
+							<div class="list-group-item list-group-item-action todoitem">
+								<p>{{ todoitem.name }}</p>
+								<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{todoitem.id}}"></button>
+								<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ todoitem.id }}">
+									<a href="#" class="dropdown-item">Edit</a>
+									<a href="#" class="dropdown-item">Set due date</a>
+									<div class="dropdown-divider"></div>
+									<a href="#" class="dropdown-item">Delete</a>
+								</div>
+							</div>
+						{% endif %}
+					{% endfor %}
+					{# Adding new todoitem #}
+				</ul>
+			</div>
+		</div>
+		{# FoldersList #}
+		<div class="col">
+			<h3>Folders</h3>
+			<div class="list-group">
+				{% for folder in folders %}
+					<a href="#" class="list-group-item list-group-item-action">{{ folder.title }}</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 
 {% endblock %}
