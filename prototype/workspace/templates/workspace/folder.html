@@ -1,0 +1,24 @@
+{% extends 'workspace/base.html' %}
+{% load static %}
+{% block head %}
+
+	<link rel="stylesheet" type="text/css" href="{% static 'workspace/workspace.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+	<h1>{{ workspace.title }}</h1>
+
+	<div class="row">
+		{# Notebooks #}
+		<div class="col">
+			<h3>Notebooks</h3>
+		</div>
+		{# Files #}
+		<div class="col">
+			<h3>{{ folder.title }}</h3>
+		</div>
+	</div>
+
+{% endblock %}

@@ -14,8 +14,8 @@
 		    <div class="card">
 		      <div class="card-body">
 		        <h5 class="card-title">{{ workspace.title }}</h5>
-		        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-		        <a href="#" class="btn btn-primary">Go somewhere</a>
+		        <p class="card-text">Workspace Descriptions</p>
+		        <a href="{% url 'user-workspace' workspace.id %}" class="btn btn-primary">{{ workspace.title }}</a>
 		      </div>
 		    </div>
 		  </div>
@@ -24,7 +24,7 @@
 	    <div class="card">
 	      <div class="card-body">
 	        <h5 class="card-title">New Workspace</h5>
-	        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+	        <p class="card-text">Create a new Workspace</p>
 	        <a href="#" class="btn btn-primary">Create new Workspace</a>
 	      </div>
 	    </div>

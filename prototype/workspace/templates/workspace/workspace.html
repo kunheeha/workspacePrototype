@@ -8,7 +8,7 @@
 
 {% block content %}
 
-	<h1>{{ workspace.title }}</h1>
+	<h1 data-workspace="{{ workspace.id }}">{{ workspace.title }}</h1>
 
 	<div class="row">
 		{# TodoList #}
@@ -21,28 +21,37 @@
 							<div class="list-group-item list-group-item-action todoitem">
 								<p><del>{{ todoitem.name }}</del></p>
 								<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{todoitem.id}}"></button>
-								<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ todoitem.id }}">
+								<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ todoitem.id }}" data-todoid="{{ todoitem.id }}">
+									<button class="dropdown-item">Mark Incomplete</button>
 									<a href="#" class="dropdown-item">Edit</a>
 									<a href="#" class="dropdown-item">Set due date</a>
 									<div class="dropdown-divider"></div>
-									<a href="#" class="dropdown-item">Delete</a>
+									<a href="{% url 'delete-todo' workspace.id todoitem.id %}" class="dropdown-item">Delete</a>
 								</div>
 							</div>
 						{% else %}
 							<div class="list-group-item list-group-item-action todoitem">
 								<p>{{ todoitem.name }}</p>
 								<button type="button" class="btn dropdown-toggle dropdown-toggle-split float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="todoDropdown-{{todoitem.id}}"></button>
-								<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ todoitem.id }}">
+								<div class="dropdown-menu" aria-labelledby="todoDropdown-{{ todoitem.id }}" data-todoid="{{ todoitem.id }}">
+									<a href="#" class="dropdown-item">Mark Complete</a>
 									<a href="#" class="dropdown-item">Edit</a>
 									<a href="#" class="dropdown-item">Set due date</a>
 									<div class="dropdown-divider"></div>
-									<a href="#" class="dropdown-item">Delete</a>
+									<a href="{% url 'delete-todo' workspace.id todoitem.id %}" class="dropdown-item">Delete</a>
 								</div>
 							</div>
 						{% endif %}
 					{% endfor %}
-					{# Adding new todoitem #}
 				</ul>
+				{# Adding new todoitem #}
+				<div>
+					<form action="" method="POST">
+						{% csrf_token %}
+						<input type="text" name="todoName">
+						<input type="submit" name="addTodo" value="Add New Task">
+					</form>
+				</div>
 			</div>
 		</div>
 		{# FoldersList #}
@@ -50,10 +59,16 @@
 			<h3>Folders</h3>
 			<div class="list-group">
 				{% for folder in folders %}
-					<a href="#" class="list-group-item list-group-item-action">{{ folder.title }}</a>
+					<a href="{% url 'workspace-folder' workspace.id folder.id %}" class="list-group-item list-group-item-action">{{ folder.title }}</a>
 				{% endfor %}
 			</div>
 		</div>
 	</div>
+
+
+{% endblock %}
+{% block javascript %}
+
+	<script type="text/javascript" src="{% static 'workspace/workspace.js' %}"></script>
 
 {% endblock %}
