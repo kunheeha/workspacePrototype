@@ -14,6 +14,13 @@
 		{# Notebooks #}
 		<div class="col">
 			<h3>Notebooks</h3>
+			<div class="list-group">
+				{% for notebook in notebooks %}
+					<a href="{% url 'notebook' workspace.id notebook.id %}" class="list-group-item list-group-item-action">{{ notebook.title }}</a>
+				{% endfor %}
+				{# Add New Notebook #}
+				<a href="#" class="list-group-item list-group-item-action">New Notebook</a>
+			</div>
 		</div>
 		{# Files #}
 		<div class="col">

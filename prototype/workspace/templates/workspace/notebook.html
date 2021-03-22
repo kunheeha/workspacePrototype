@@ -1,0 +1,44 @@
+{% extends 'workspace/base.html' %}
+{% load static %}
+{% block head %}
+
+	<link rel="stylesheet" type="text/css" href="{% static 'workspace/workspace.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'workspace/notebook.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+	<h1>{{ workspace.title }}</h1>
+
+	<div class="row">
+		{# Notes #}
+		<div class="col">
+			<h3>{{ currentnotebook.title }}</h3>
+			<div class="list-group">
+				{% for note in notes %}
+					<button class="list-group-item list-group-item-action allNotes" data-noteid="{{ note.id }}">{{ note.title }}</button>
+				{% endfor %}
+				{# Add New Notebook #}
+				<a href="{% url 'new-note' currentnotebook.id %}" class="list-group-item list-group-item-action">New Note</a>
+			</div>
+		</div>
+		{# Open Note #}
+		<div class="col">
+			{% for note in notes %}
+				<div class="Notes inactiveNote" id="{{ note.id }}">
+					<h3>{{ note.title }}</h3>
+					<p>{{ note.content }}</p>
+					<a href="{% url 'edit-note' currentnotebook.id note.id %}" class="btn btn-primary">Edit</a>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{% static 'workspace/notebook.js' %}"></script>
+
+{% endblock %}
