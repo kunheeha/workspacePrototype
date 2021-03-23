@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView
-from .models import Workspace, TodoItem, Folder, Notebook, Note
+from .models import Workspace, TodoItem, Folder, Notebook, Note, File
+from .forms import FileForm
 
 
 def home(request):
@@ -70,21 +71,45 @@ def markTodo(request, *args, **kwargs):
 
 @login_required
 def folder(request, *args, **kwargs):
+    workspaceid = kwargs['workspaceid']
+    folderid = kwargs['folderid']
     currentWorkspace = Workspace.objects.filter(
         id=kwargs['workspaceid']).first()
     currentFolder = Folder.objects.filter(id=kwargs['folderid']).first()
     notebooks = Notebook.objects.filter(folder=currentFolder)
     authorised_users = User.objects.filter(workspace=currentWorkspace)
+    files = File.objects.filter(folder=currentFolder).all()
+
+    if request.method == 'POST':
+        fileform = FileForm(request.POST, request.FILES,
+                            initial={'folder': currentFolder})
+        if fileform.is_valid():
+            fileform.save()
+            return redirect('workspace-folder', workspaceid=workspaceid, folderid=folderid)
+
+    fileform = FileForm(initial={'folder': currentFolder})
 
     context = {
         'workspace': currentWorkspace,
         'folder': currentFolder,
-        'notebooks': notebooks
+        'notebooks': notebooks,
+        'files': files,
+        'fileform': fileform
     }
     if request.user in authorised_users:
         return render(request, 'workspace/folder.html', context)
 
     return render(request, 'workspace/deniedaccess.html')
+
+
+def delete_file(request, *args, **kwargs):
+    workspaceid = kwargs['workspaceid']
+    folderid = kwargs['folderid']
+    if request.method == 'POST':
+        file = File.objects.get(id=kwargs['fileid'])
+        file.delete()
+
+    return redirect('workspace-folder', workspaceid=workspaceid, folderid=folderid)
 
 
 def notebookView(request, *args, **kwargs):

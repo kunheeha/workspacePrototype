@@ -17,5 +17,7 @@ urlpatterns = [
     path('notebook/<int:notebookid>/newnote/',
          NoteCreateView.as_view(), name='new-note'),
     path('notebook/<int:notebookid>/<int:pk>/editnote/',
-         NoteEditView.as_view(), name='edit-note')
+         NoteEditView.as_view(), name='edit-note'),
+    path('workspace/<int:workspaceid>/<int:folderid>/<int:fileid>/delete/',
+         views.delete_file, name='delete-file'),
 ]

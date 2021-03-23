@@ -11,13 +11,30 @@ class Workspace(models.Model):
         return f'{self.title}, id={self.pk}'
 
 
+def user_directory_path(instance, filename):
+    return f'folder_{instance.folder.id}/{filename}'
+
+
 class Folder(models.Model):
     title = models.CharField(max_length=100)
-    pathname = models.CharField(max_length=100)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'folder title: {self.title}'
+
+
+class File(models.Model):
+    name = models.CharField(max_length=50)
+    desc = models.CharField(max_length=100)
+    filename = models.FileField(upload_to=user_directory_path)
+    folder = models.ForeignKey(Folder, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'file name: {self.name}'
+
+    def delete(self, *args, **kwargs):
+        self.filename.delete()
+        super().delete(*args, **kwargs)
 
 
 class Notebook(models.Model):
